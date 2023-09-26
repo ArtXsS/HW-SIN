@@ -20,39 +20,15 @@ public class Main {
         }).start();
 
         new Thread(() -> {
-            int count = 0;
-            try {
-                for (char c : forA.take().toCharArray()) {
-                    if (c == 'a') count++;
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("Буква 'a' встретилась: " + count);
+            queueAnaliz(forA, 'a');
         }).start();
 
         new Thread(() -> {
-            int count = 0;
-            try {
-                for (char c : forB.take().toCharArray()) {
-                    if (c == 'b') count++;
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("Буква 'b' встретилась: " + count);
+            queueAnaliz(forB, 'b');
         }).start();
 
         new Thread(() -> {
-            int count = 0;
-            try {
-                for (char c : forC.take().toCharArray()) {
-                    if (c == 'c') count++;
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("Буква 'c' встретилась: " + count);
+            queueAnaliz(forC, 'c');
         }).start();
     }
     public static String generateText(String letters, int length) {
@@ -62,5 +38,17 @@ public class Main {
             text.append(letters.charAt(random.nextInt(letters.length())));
         }
         return text.toString();
+    }
+
+    public static void queueAnaliz(BlockingQueue<String> queue, char ch) {
+        int count = 0;
+        try {
+            for (char c : queue.take().toCharArray()) {
+                if (c == ch) count++;
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Буква " + ch + " встретилась: " + count);
     }
 }
